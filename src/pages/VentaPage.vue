@@ -213,15 +213,25 @@ class="q-pa-md"
 
   label="Selecciona el Vendedor *"
         v-model="venta.vendedor"
-        :options="vendedores"
+        :options="optionsVendedores"
 		:change= "ConfirmHoster()"
+		use-input
+		 @filter="filterFn"
         :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : ''"
         :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name +' ' + opt.lastname + ' ' + opt.documento: ''"
 
         emit-value
         map-options
       
-      />
+      >
+	  <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              No resultado
+            </q-item-section>
+          </q-item>
+        </template>
+	  </q-select>
 
 </q-card-section>	
 		
@@ -468,6 +478,12 @@ class="q-pa-md"
 <q-card-section class="horizontal">
 
   <q-select
+  
+  
+  
+  
+  
+  
   filled
 
   label="Selecciona el Vendedor *"
@@ -654,6 +670,7 @@ const $q = useQuasar()
  file: null, 
  jsonData: null,
  excelValido: false,
+ optionsVendedores: [],
     newVenta: false,
     editVenta: false,
 
@@ -1266,8 +1283,8 @@ await api.post('/venta/masivo/',this.jsonData,{
    validarDatos(datos){
 	let valor = true;
 	datos.forEach(element=>{
-    
-	if(element.CHASIS =="" || typeof(this.colores.find(color=> color.name ===  element.COLOR)) =="undefined" || element.FECHA_VENTA =="" || element.NOMBRE_COMPLETO_CLIENTE =="" || element.PRECIO_REGULAR == "" || element.PRECIO_VENTA =="" ||  typeof ( this.modelos.find(modelo =>modelo.name === element.MODELO )) === "undefined"|| typeof (this.vendedores.find(vendedor =>vendedor.documento === element.DOCUMENTO_VENDEDOR.toString() )) === "undefined" ){
+   
+	if(element.CHASIS =="" || typeof(this.colores.find(color=> color.name ===  element.COLOR)) =="undefined" || element.FECHA_VENTA =="" || element.NOMBRE_COMPLETO_CLIENTE =="" || element.PRECIO_REGULAR == "" || element.PRECIO_VENTA =="" ||  typeof ( this.modelos.find(modelo =>modelo.name === element.MODELO.toString() )) === "undefined"|| typeof (this.vendedores.find(vendedor =>vendedor.documento === element.DOCUMENTO_VENDEDOR.toString() )) === "undefined" ){
     
 valor = false;
  this.$q.notify({
@@ -1281,6 +1298,21 @@ valor = false;
 	})	
 	return valor;
 	},
+	 filterFn (val, update) {
+	   
+        if (val === '') {
+		
+          update(() => {
+            this.optionsVendedores = this.vendedores          
+          })
+          return
+        }
+         
+        update(() => {
+          const needle = val.toLowerCase()
+          this.optionsVendedores = this.optionsVendedores.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+        })
+      },
 	
 
 	 
