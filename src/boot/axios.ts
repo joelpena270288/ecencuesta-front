@@ -18,7 +18,7 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 //const api = axios.create({ baseURL: 'http://ec2-18-219-127-35.us-east-2.compute.amazonaws.com/api' })
 //Local
 //const api = axios.create({ baseURL: 'http://192.168.100.102:3000/api' })
-const api = axios.create({ baseURL: 'http://ec2-3-144-176-173.us-east-2.compute.amazonaws.com/api' })
+const api = axios.create({ baseURL: 'http://ec2-3-137-217-206.us-east-2.compute.amazonaws.com/api' })
 //const api = axios.create({ baseURL: 'api' })
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
